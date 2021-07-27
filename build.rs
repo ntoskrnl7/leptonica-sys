@@ -21,8 +21,7 @@ fn find_leptonica_system_lib() -> Option<String> {
     Some(include)
 }
 
-// On macOS, we sometimes need additional search paths, which we get using pkg-config
-#[cfg(target_os = "macos")]
+#[cfg(not(windows))]
 fn find_leptonica_system_lib() -> Option<String> {
     let pk = pkg_config::Config::new()
         // .atleast_version(MINIMUM_LEPT_VERSION)
@@ -30,19 +29,13 @@ fn find_leptonica_system_lib() -> Option<String> {
         .unwrap();
     // Tell cargo to tell rustc to link the system proj shared library.
     println!("cargo:rustc-link-search=native={:?}", pk.link_paths[0]);
-    println!("cargo:rustc-link-lib=lept");
+    println!("cargo:rustc-link-lib={}", pk.libs[0]); // -llept or -lleptonica
 
     let mut include_path = pk.include_paths[0].clone();
     // The include file used in this project has "leptonica" as part of
     // the header file already
     include_path.pop();
     Some(include_path.to_string_lossy().to_string())
-}
-
-#[cfg(all(not(windows), not(target_os = "macos")))]
-fn find_leptonica_system_lib() -> Option<String> {
-    println!("cargo:rustc-link-lib=lept");
-    None
 }
 
 fn main() {
