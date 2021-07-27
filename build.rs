@@ -1,6 +1,6 @@
 extern crate bindgen;
 
-#[cfg(target_os = "macos")]
+#[cfg(not(windows))]
 use pkg_config;
 use std::env;
 use std::path::PathBuf;
