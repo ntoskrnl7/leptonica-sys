@@ -25,12 +25,14 @@ fn find_leptonica_system_lib() -> Option<String> {
 fn find_leptonica_system_lib() -> Option<String> {
     let pk = pkg_config::Config::new()
         // .atleast_version(MINIMUM_LEPT_VERSION)
+        .statik(cfg!(feature="enable-static"))
         .probe("lept")
         .unwrap();
     // Tell cargo to tell rustc to link the system proj shared library.
-    println!("cargo:rustc-link-search=native={:?}", pk.link_paths[0]);
-    println!("cargo:rustc-link-lib={}", pk.libs[0]); // -llept or -lleptonica
-
+    for lib in pk.libs {
+        println!("cargo:rustc-link-lib={}", lib);
+        println!("cargo:warning={:?}", lib);
+    }
     let mut include_path = pk.include_paths[0].clone();
     // The include file used in this project has "leptonica" as part of
     // the header file already

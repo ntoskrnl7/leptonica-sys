@@ -1,21 +1,25 @@
 [package]
 name = "leptonica-sys"
-version = "0.3.5"
-authors = ["Chris Couzens <ccouzens@gmail.com>"]
+version = "0.3.6"
+authors = ["Chris Couzens <ccouzens@gmail.com>", "Jung-kwang Lee <ntoskrnl7@gmail.com>"]
 edition = "2018"
 links = "lept"
 build = "build.rs"
 description = "FFI bindings for Leptonica"
 license = "MIT"
-repository = "https://github.com/ccouzens/leptonica-sys"
+repository = "https://github.com/ntoskrnl7/leptonica-sys"
 keywords = ["leptonica"]
 categories = ["api-bindings", "multimedia::images"]
 
 [build-dependencies]
-bindgen = "0.56"
+bindgen = "0.59.1"
 
 [target.'cfg(windows)'.build-dependencies]
 vcpkg = "0.2.8"
 
 [target.'cfg(not(windows))'.build-dependencies]
 pkg-config = "0.3.19"
+
+[features]
+default = []
+enable-static = []
